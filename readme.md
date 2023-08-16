@@ -18,7 +18,8 @@ Most of the scripts are dependant on
 
 ## Installation
 
-1. Clone the repository to your home directory
+1. Clone the repository to your home directory as `bin`
+
 2. Add the following to your `.zshrc`:
 
 ```bash
