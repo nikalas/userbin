@@ -6,13 +6,15 @@ Short scripts to make your life easier.
 
 Most of the scripts are dependant on
 
-- [zsh](https://www.zsh.org/) Shell
-- [git](https://git-scm.com/) Version Control
-- [fzf](https://github.com/junegunn/fzf) fuzzy finder
-- [fd](https://github.com/sharkdp/fd) fast find
-- [bat](https://github.com/sharkdp/bat) cat with wings
-- [awk](https://www.gnu.org/software/gawk/manual/gawk.html)
-- [sed](https://www.gnu.org/software/sed/manual/sed.html)
+| Dependency | Description     |
+| ---------- | --------------- |
+| zsh        | Shell           |
+| git        | Version Control |
+| fzf        | Fuzzy Finder    |
+| fd         | Fast Find       |
+| bat        | Cat with Wings  |
+| awk        | Text Processing |
+| sed        | Text Processing |
 
 ## Installation
 
