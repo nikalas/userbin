@@ -1,0 +1,9 @@
+#! /bin/bash
+
+# Shows a list of all files in in this folder recursively and opens the selected one in VS Code
+# Dependent on fzf and code
+
+set -e
+FILE=$(fzf --preview 'head -500 | bat --style numbers,changes --color=always {}')
+
+code $FILE

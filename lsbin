@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Shows a list of all files in ~/bin and executes the selected one
+# Dependent on fzf and awk
+
+set -e
+
+# List all files in ~/bin and select a file using fzf
+selected_file=$(find ~/bin -not -path '*/.git/*' \( -type f -o -type l \)| fzf --preview 'awk "/^#!/ {flag=1; next} /set/ {flag=0; exit} flag" {}' )
+
+# Check if fzf returned a valid selection
+if [ -z "$selected_file" ]; then
+    echo "No file selected"
+    exit
+fi
+
+# Execute the selected file
+"$selected_file"

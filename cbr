@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Shows a list of all branches and checks out the selected one
+# Dependent on fzf, git and sed
+
+set -e
+
+# check if fzf is installed
+if ! command -v fzf &> /dev/null
+then
+    echo "fzf could not be found"
+    exit
+fi
+
+# check if git is installed
+if ! command -v git &> /dev/null
+then
+    echo "git could not be found"
+    exit
+fi
+
+# check if sed is installed
+if ! command -v sed &> /dev/null
+then
+    echo "sed could not be found"
+    exit
+fi
+
+# check if there are any branches
+if [ -z "$(git branch --all)" ]
+then
+    echo "No branches found"
+    exit
+fi
+
+# run the command
+#git switch $(git branch --all | fzf| tr -d "[[:space:]]" | sed 's/remotes\/origin\///g')
+git switch $(git branch --all | fzf| sed -e 's/[[:space:]]//g' -e 's/remotes\/origin\///g')
