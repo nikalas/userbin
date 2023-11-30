@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 
-# This script will merge the current branch into the release/dev branch
+# This script will merge the current branch into the provided branch or release/dev branch
 # and then switch back to the current branch.
 
-# Save as merge-dev in your path (ex. ~/bin/merge-dev) and make executable
+# Save as quick-merge in your path (ex. ~/bin/quick-merge) and make executable
+# The script can be used as a base with aliases for other branches eg. `alias mprod='quick-merge release/prod'`
 
 set -e
 
+# Check if a command line argument is provided
+if [ -z "$1" ]
+then
+    MERGE_TARGET="release/dev"
+else
+    MERGE_TARGET=$1
+fi
+
 # ask for confirmation
-read -p "Are you sure you want to merge into release/dev? (y/n) " -n 1 -r
+read -p "Are you sure you want to merge into $MERGE_TARGET? (y/n) " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
     echo
@@ -22,7 +31,7 @@ NC='\033[0m' # No Color
 
 CURRENT_BRANCH=$( git rev-parse --abbrev-ref HEAD )
 echo $CURRENT_BRANCH
-git checkout release/dev
+git checkout $MERGE_TARGET
 git pull
 git merge $CURRENT_BRANCH
 if [ $? -ne 0 ]; then
