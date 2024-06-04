@@ -1,0 +1,87 @@
+#! /bin/zsh
+
+# Requeriments:
+# - fd: find with a nice syntax
+# - fzf: fuzzy finder
+# - bat: cat with wings
+# - eza: ls with icons
+
+# instructions:
+# 0. install fd, fzf, bat and eza
+# 1. add this file to your .bashrc or .zshrc
+# 2. source .bashrc or .zshrc
+# 3. use the command cs to change project directory
+
+cs() {
+    local pattern="${1:-.}"
+    local target_dir="/Users/niklaseliason/Sites"
+    
+    # Search for directories matching the pattern and let the user select one using fzf
+    local selected_dir=$(fd "${pattern}" -d 2 --full-path --type d "${target_dir}" |
+        fzf --height 40% --preview '
+            readme=$(fd -d 1 -i readme.md {} -t f -1);
+            if [ -f "$readme" ]; then
+                bat --color=always "$readme" 2>/dev/null
+            else
+                eza -ahl --icons --color=always {}
+        fi'
+    )
+    
+    # Check if any directory was selected
+    if [ -z "$selected_dir" ]; then
+        echo "No directory selected."
+        return 1  # Exit with an error status
+    fi
+    
+    # Navigate to the selected directory
+    cd "$selected_dir/wp-content/themes/" || cd "$selected_dir"
+    
+    # Navigate to the first directory not starting with 'twenty'
+    cd *[^twenty]*(/[1])
+}
+
+
+
+
+cs2() {
+    local pattern="${1:-.}"
+    local target_dir="/Users/niklaseliason/Sites"
+    
+    # Use fd to search for directories matching the pattern and let the user select one using fzf
+    local dirs=$(fd "${pattern}" -d 2 --full-path --type d "${target_dir}")
+    if [ -z "$dirs" ]; then
+        echo "No directories found matching the pattern in $target_dir."
+        return 1  # Exit with an error status
+    fi
+    
+    local selected_dir=$(echo "$dirs" | fzf --height 40% --preview '
+        context_dir=$(resolve_context_dir "{}")
+
+        readme=$(fd "readme.md" "$context_dir" -i -t f -d 1 | head -1)
+        if [ -f "$readme" ]; then
+            if command -v bat >/dev/null; then
+                bat --color=always "$readme" 2>/dev/null
+            else
+                cat "$readme" 2>/dev/null
+            fi
+        else
+            if command -v exa >/dev/null; then
+                exa -ahl --icons --color=always "$context_dir"
+            elif command -v eza >/dev/null; then
+                eza -ahl --icons --color=always "$context_dir"
+            else
+                ls -ahl "$context_dir"
+            fi
+        fi'
+    )
+    
+    # Check if any directory was selected
+    if [ -z "$selected_dir" ]; then
+        echo "No directory selected."
+        return 1  # Exit with an error status
+    fi
+    
+    # Navigate to the selected directory
+    cd "$selected_dir" || return 1
+}
+
