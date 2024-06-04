@@ -3,6 +3,8 @@
 # Shows a list of all branches and checks out the selected one
 # Dependent on fzf, git and sed
 
+# TODO: add feature to create a new branch if old branch does not exist
+
 set -e
 
 # check if fzf is installed
